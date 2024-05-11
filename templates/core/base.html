@@ -1,0 +1,49 @@
+<html>
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Hober Chat</title>
+
+    <script src="https://cdn.tailwindcss.com" rel="stylesheet" ></script>
+     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+
+</head>
+<body class="bg-gray-300 h-dvh">
+<nav class="flex items-center justify-between px-4 py-6 bg-amber-500">
+    <div>
+        <a href="/" class="text-xl text-gray-700">Hober Chat</a>
+    </div>
+    <div>
+        {% if request.user.is_authenticated %}
+        <a href="/logout/" class="text-orange-700">Logout</a>
+{% else %}
+        <a href="/login">Login/Signup</a>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="main">
+    {% block content %}
+    {% endblock %}
+
+{% block scripts %}
+{% endblock %}
+</div>
+</body>
+</html>

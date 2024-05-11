@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+
+{% block title %} Signup {% endblock %}
+
+
+
+{% block content %}
+
+<h1 class="text-center font-bold text-3xl m-5 text">Signup</h1>
+
+    <form method="post" action="." class="lg:w-1/4 px-4 mx-auto sm:mx-5 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    {% csrf_token %}
+    
+    <div class="mb-4 {% if form.email.errors %}has-error{% endif %}">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {% if form.email.errors %}border-red-500{% endif %}" id="email" type="email" name="email" placeholder="Email">
+        {% for error in form.email.errors %}
+            <p class="text-red-500 text-xs italic">{{ error }}</p>
+        {% endfor %}
+    </div>
+    <div class="mb-4 {% if form.username.errors %}has-error{% endif %}">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {% if form.username.errors %}border-red-500{% endif %}" id="username" type="text" name="username" placeholder="Username">
+        {% for error in form.username.errors %}
+            <p class="text-red-500 text-xs italic">{{ error }}</p>
+        {% endfor %}
+    </div>
+    <div class="mb-4 {% if form.password1.errors %}has-error{% endif %}">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="password1">Password</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {% if form.password1.errors %}border-red-500{% endif %}" id="password1" type="password" name="password1" placeholder="Password">
+        {% for error in form.password1.errors %}
+            <p class="text-red-500 text-xs italic">{{ error }}</p>
+        {% endfor %}
+    </div>
+    <div class="mb-4 {% if form.password2.errors %}has-error{% endif %}">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="password2">Repeat password</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {% if form.password2.errors %}border-red-500{% endif %}" id="password2" type="password" name="password2" placeholder="Repeat password">
+        {% for error in form.password2.errors %}
+            <p class="text-red-500 text-xs italic">{{ error }}</p>
+        {% endfor %}
+    </div>
+<div class="flex items-center justify-between">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+        Sign In
+      </button>
+      <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+        Forgot Password?
+      </a>
+    </div>
+
+    </form>
+{%  endblock %}
