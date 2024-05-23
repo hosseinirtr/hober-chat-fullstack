@@ -62,17 +62,16 @@
     );
 
     chatSocket.onmessage = function(e) {
-        console.log("Data before process:", e, e.data);
 
         const data = JSON.parse(e.data);
-        console.log(data);
+        const date = new Date()
         if (data.message) {
-            const { message, username, timestamp } = data;
+            const { message, username } = data;
             const html = `
                 <div class="flex mb-4 ${username === userName ? 'justify-end' : ''}">
                     <div class="chat-bubble ${username === userName ? 'me' : 'other'} rounded-lg p-3 break-all ${username === userName ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}">
                         <p class="text-sm">${message}</p>
-                        <p class="text-xs text-gray-500">${timestamp}</p>
+                        <p class="text-xs text-gray-500">${date}</p>
                     </div>
                 </div>
             `;

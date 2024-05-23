@@ -1,6 +1,7 @@
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
 from .forms import SignUpForm
+from django.contrib.auth.views import LogoutView
 
 
 def frontpage(request):
@@ -19,3 +20,13 @@ def signup(request):
     else:
         form = SignUpForm()
         return render(request, 'core/signup.html', {'form': form})
+
+
+
+class CustomLogoutView(LogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        # If the request method is GET, perform logout and redirect
+        if request.method == 'GET':
+            return self.get(request, *args, **kwargs)
+        # For other methods, let the parent class handle it (POST)
+        return super().dispatch(request, *args, **kwargs)
