@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+
+
+{% if request.user.is_authenticated %}
+{% block title %} Welcome {{request.user.username}} {% endblock %}
+{% endif %}
+
+
+{% block content %}
+<div class="p-10 lg:text-6xl text-white">
+    <h1 class="text-3xl-3xl lg:text-6xl text-black">Hober is infinity</h1>
+
+    {% if request.user.is_authenticated %}
+
+    <div class="mb-4 mt-5">
+
+        <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text" id="search-input" placeholder="Search by user ID">
+    </div>
+
+    <ul id="search-results"></ul>
+
+</div>
+{% endif %}
+{% endblock %}
+
+
+{% block scripts %}
+{{ request.user.username|json_script:"json-username" }}
+<script>
+
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+
+    searchInput.addEventListener('input', async () => {
+        const user = searchInput.value;
+        if (user.length >= 3) {
+            const response = await fetch(`/search/?user=${encodeURIComponent(user)}`);
+            const data = await response.json();
+            renderResults(data.users);
+        } else {
+            clearResults();
+        }
+    });
+    function renderResults(users) {
+        searchResults.innerHTML = '';
+        users.forEach(user => {
+            const userRow = `
+                <a href="/rooms/${user.username}">
+
+                <button  class="w-full my-5 border bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                            {% load static %}
+                            <img src="{% static 'img/user_avatar_default.jpg' %}" class="rounded-full" height="30" width="30" alt="My image">
+                        <span class="mx-2 text-[24px] capitalize">${user.username}</span>
+                    </button>
+                </a>
+                `;
+            searchResults.insertAdjacentHTML('beforeend', userRow);
+        });
+    }
+
+
+    function clearResults() {
+        searchResults.innerHTML = '';
+    }
+</script>
+
+{% endblock %}

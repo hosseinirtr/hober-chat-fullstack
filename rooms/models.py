@@ -3,28 +3,33 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from core.validators import validate_slug
+import hashlib
+
 
 # Create your models here.
 
 
+import hashlib
+from django.db import models
+from django.contrib.auth.models import User
+
+
 class Room(models.Model):
-    name = models.CharField(max_length=24)
-    description = models.TextField(max_length=128)
     members = models.ManyToManyField(User)
-    is_private = models.BooleanField(default=False)
-    slug = models.SlugField(max_length=24, unique=True, validators=[validate_slug])
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(unique=True)
+    is_private = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
-        if self.is_private is True:
-            self.slug = slugify(self.slug+"_gp")
-        if not self.name:
-            self.name = self.slug.replace("_", '').replace("-", '')
         if not self.slug:
-            self.slug = slugify(self.name.replace(" ", '_'))
-        if not self.slug and not self.name:
-            raise ValidationError("Both 'name' and 'slug' cannot be empty.")
+            # Get the user IDs and sort them to ensure consistent order
+            user_ids = sorted([str(member.id) for member in self.members.all()])
+
+            # Create a unique string from the sorted user IDs
+            unique_string = "-".join(user_ids)
+
+            # Hash the unique string using SHA-256 and truncate the result
+            self.slug = hashlib.sha256(unique_string.encode("utf-8")).hexdigest()[:64]
+
         super().save(*args, **kwargs)
 
 
@@ -35,4 +40,4 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ('created_at', )
+        ordering = ("created_at",)

@@ -1,0 +1,48 @@
+  hober-chat-fullstack
+    | - HoberChat
+    |  | - asgi.py
+    |  | - __init__.py
+    |  | - settings.py
+    |  | - urls.py
+    |  | - views.py
+    |  | - wsgi.py
+    | - core
+    |  | - migrations
+    |  |  | - __init__.py
+    |  | - models.py
+    |  | - validators.py
+    |  | - __init__.py
+    |  | - apps.py
+    |  | - forms.py
+    |  | - admin.py
+    |  | - tests.py
+    |  | - urls.py
+    |  | - views.py
+    | - requirements.txt
+    | - readme.md
+    | - .gitignore
+    | - .github
+    |  | - workflows
+    |  |  | - django.yml
+    | - templates
+    |  | - core
+    |  |  | - room.html
+    |  |  | - base.html
+    |  |  | - login.html
+    |  |  | - rooms.html
+    |  |  | - frontpage.html
+    |  |  | - signup.html
+    | - manage.py
+    | - rooms
+    |  | - models.py
+    |  | - consumers.py
+    |  | - __init__.py
+    |  | - apps.py
+    |  | - admin.py
+    |  | - routing.py
+    |  | - tests.py
+    |  | - urls.py
+    |  | - views.py
+    | - structure.txt
+    | - .vscode
+    |  | - settings.json

@@ -1,6 +1,12 @@
 {% extends 'core/base.html' %}
 
-{% block title %} {{ room.name }} | {% endblock %}
+{% block title %}
+{% for member in room.members.all %}
+{% if member != request.user %}
+Chat with {{ member.username }}
+{% endif %}
+{% endfor %}
+{% endblock %}
 
 {% block content %}
 <div class="container mx-auto max-w-lg mt-8">
@@ -15,34 +21,34 @@
             <!-- Chat Messages -->
             <div class="p-4 h-64 overflow-y-auto" id="chat-message">
                 {% for message in messages %}
-                	{% if message.user.username == request.user.username %}
-                        <div class="flex mb-4 justify-end">
+                {% if message.user.username == request.user.username %}
+                <div class="flex mb-4 justify-end">
                     <div class="chat-bubble me rounded-lg p-3 break-all bg-blue-500 text-white">
                         <p class="text-sm">{{ message.content }}</p>
                         <p class="text-xs text-gray-300">{{ message.created_at }}</p>
                     </div>
                 </div>
 
-                        {% else %}
-                        	<div class="flex mb-4">
+                {% else %}
+                <div class="flex mb-4">
                     <div class="chat-bubble other rounded-lg p-3 break-all bg-gray-200 text-gray-800">
                         <p class="text-sm">{{ message.content }}</p>
                         <p class="text-xs text-gray-500">{{ message.created_at }}</p>
                     </div>
                 </div>
-                	{% endif %}
+                {% endif %}
                 {% endfor %}
 
 
             </div>
             <!-- Chat Input -->
-            <form action="." method="post"  class="flex p-4 border-t border-gray-200">
+            <form action="." method="post" class="flex p-4 border-t border-gray-200">
 
-                       <input name="content" id="chat-message-input" type="text" placeholder="Type your message..." class="flex-1 border-none px-3 py-2 mx-1 click:border-none focus:outline-none focus:border-blue-500">
-                   <button
-                       class="px-5 py-3 rounded-xl text-white bg-cyan-500 hover:bg-teal-700"
-                       id="chat-message-submit">Send</button>
-               </form>
+                <input name="content" id="chat-message-input" type="text" placeholder="Type your message..."
+                    class="flex-1 border-none px-3 py-2 mx-1 click:border-none focus:outline-none focus:border-blue-500">
+                <button class="px-5 py-3 rounded-xl text-white bg-cyan-500 hover:bg-teal-700"
+                    id="chat-message-submit">Send</button>
+            </form>
         </div>
     </div>
 </div>
@@ -51,17 +57,17 @@
 {% endblock %}
 
 {% block scripts %}
-    {{ room.slug|json_script:"json-roomname" }}
-    {{ request.user.username|json_script:"json-username" }}
+{{ room.slug|json_script:"json-roomname" }}
+{{ request.user.username|json_script:"json-username" }}
 
-    <script>
+<script>
     const roomName = JSON.parse(document.getElementById('json-roomname').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const chatSocket = new WebSocket(
         'ws://' + window.location.host + '/ws/' + roomName + '/'
     );
 
-    chatSocket.onmessage = function(e) {
+    chatSocket.onmessage = function (e) {
 
         const data = JSON.parse(e.data);
         const date = new Date()
@@ -80,7 +86,7 @@
         }
     };
 
-    chatSocket.onclose = function(e) {
+    chatSocket.onclose = function (e) {
         console.log("WebSocket connection closed.");
     };
 
@@ -106,9 +112,8 @@
         dom.scrollTop = dom.scrollHeight;
     }
 
-    document.addEventListener("DOMContentLoaded", function(event) {
+    document.addEventListener("DOMContentLoaded", function (event) {
         scrollBtm();
     });
-    </script>
+</script>
 {% endblock %}
-
